@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prativa Dutta | Full Stack Developer</title>
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Load Feather Icons -->
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    
+    <!-- Load 3D & Animation Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-gradient {
+                @apply bg-clip-text text-transparent bg-gradient-to-r;
+            }
+            .perspective-1000 {
+                perspective: 1000px;
+            }
+            .transform-3d {
+                transform-style: preserve-3d;
+            }
+        }
+        
+        /* Custom styles for smooth scrolling and dark scrollbar */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        /* Dark scrollbar for webkit browsers */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111827; /* gray-900 */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #374151; /* gray-700 */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4b5563; /* gray-600 */
+        }
+    </style>
+    <!-- Add Inter font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-gray-900 text-gray-100 overflow-x-hidden">
+
+    <!-- CUSTOM NAVBAR COMPONENT -->
+    <custom-navbar></custom-navbar>
+    
+    <!-- HERO SECTION -->
+    <main id="vanta-bg" class="min-h-screen flex items-center justify-center py-20 pt-32 lg:pt-20">
+        <div class="container mx-auto px-6 lg:px-12">
+            <div class="flex flex-col lg:flex-row items-center gap-12">
+                
+                <!-- Hero Text Content -->
+                <div class="lg:w-1/2 relative z-10 text-center lg:text-left">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-6">
+                        <span class="text-gradient from-purple-400 to-teal-400">Transform Ideas</span>
+                        <span class="block">Into Digital</span>
+                        <span class="block">Solutions</span>
+                    </h1>
+                    <p class="text-lg text-gray-300 mb-8 max-w-lg mx-auto lg:mx-0">
+                        I'm a full stack developer crafting robust and scalable digital solutions from concept to deployment.
+                    </p>
+                    <div class="flex gap-4 justify-center lg:justify-start">
+                        <a href="#work" class="px-6 py-3 bg-gradient-to-r from-purple-500 to-teal-500 rounded-full font-medium hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 transform hover:-translate-y-1">
+                            View Work
+                        </a>
+                        <a href="#contact" class="px-6 py-3 border border-gray-600 rounded-full font-medium hover:bg-gray-800 transition-all">
+                            Contact Me
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Hero 3D Card -->
+                <div class="lg:w-1/2 relative flex justify-center">
+                    <div id="floating-card-container" class="relative perspective-1000 transform-3d">
+                        <div class="w-64 h-64 md:w-80 md:h-80 bg-gradient-to-br from-purple-500/20 to-teal-500/20 rounded-2xl absolute -top-10 -left-10 blur-2xl animate-pulse"></div>
+                        <div id="floating-card" class="w-64 h-64 md:w-80 md:h-80 bg-gray-800/50 backdrop-blur-md border border-gray-700 rounded-2xl shadow-2xl flex items-center justify-center transition-transform duration-300 ease-out">
+                            <div class="w-48 h-48 bg-gradient-to-br from-purple-500 to-teal-500 rounded-full mix-blend-lighten opacity-20 absolute"></div>
+                            <!-- Replaced image with a working placeholder -->
+                            <img src="https://i.ibb.co/ZR9vrgfj/images.jpg" 
+                                 alt="3D Abstract Graphic" 
+                                 class="w-full h-full object-cover rounded-2xl"
+                                 onerror="this.src='https://placehold.co/640x360/282a36/FFFFFF?text=Image+Error'">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FEATURED WORK SECTION -->
+    <section id="work" class="py-20 bg-gray-900/70 backdrop-blur-sm">
+        <div class="container mx-auto px-6 lg:px-12">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Featured Work</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Projects that showcase of my experiences</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Project Card 1 -->
+                <div class="bg-gray-800 rounded-xl overflow-hidden border border-gray-700 hover:border-teal-400/50 transition-all group perspective-1000 transform-3d">
+                    <div class="h-48 overflow-hidden relative">
+                        <img src="https://i.ibb.co/WvbpjsN5/isometric-30.jpg" 
+                             alt="Project 1" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                             onerror="this.src='https://placehold.co/640x360/44475a/FFFFFF?text=Image+Error'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-transparent to-transparent"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 group-hover:text-teal-400 transition-colors">3D Product Visualizer</h3>
+                        <p class="text-gray-400 mb-4">Interactive 3D configurator for e-commerce.</p>
+                        <div class="flex gap-2 flex-wrap">
+                            <span class="px-3 py-1 bg-gray-700 rounded-full text-sm">Three.js</span>
+                            <span class="px-3 py-1 bg-gray-700 rounded-full text-sm">React</span>
+                            <span class="px-3 py-1 bg-gray-700 rounded-full text-sm">GSAP</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 2 -->
+                <div class="bg-gray-800 rounded-xl overflow-hidden border border-gray-700 hover:border-purple-400/50 transition-all group perspective-1000 transform-3d">
+                    <div class="h-48 overflow-hidden relative">
+                        <img src="https://i.ibb.co/WNPP8cdF/unnamed.jpg" 
+                             alt="Project 2" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                             onerror="this.src='https://placehold.co/640x360/44475a/FFFFFF?text=Image+Error'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-transparent to-transparent"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 group-hover:text-purple-400 transition-colors">Calculater</h3>
+                        <p class="text-gray-400 mb-4">Calculater.</p>
+                        <div class="flex gap-2 flex-wrap">
+                            <span class="px-3 py-1 bg-gray-700 rounded-full text-sm">html</span>
+                            <span class="px-3 py-1 bg-gray-700 rounded-full text-sm">css</span>
+                            <span class="px-3 py-1 bg-gray-700 rounded-full text-sm">js</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 3 -->
+                <div class="bg-gray-800 rounded-xl overflow-hidden border border-gray-700 hover:border-teal-400/50 transition-all group perspective-1000 transform-3d">
+                    <div class="h-48 overflow-hidden relative">
+                        <img src="https://i.ibb.co/LzzTQSt5/virtual-reality-art-exhibition-with-immersive-displays-263366-2704.jpg" 
+                             alt="Project 3" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                             onerror="this.src='https://placehold.co/640x360/44475a/FFFFFF?text=Image+Error'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-transparent to-transparent"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 group-hover:text-teal-400 transition-colors">Interactive Data Viz</h3>
+                        <p class="text-gray-400 mb-4">3D data visualization for complex datasets.</p>
+                        <div class="flex gap-2 flex-wrap">
+                            <span class="px-3 py-1 bg-gray-700 rounded-full text-sm">D3.js</span>
+                            <span class="px-3 py-1 bg-gray-700 rounded-full text-sm">Three.js</span>
+                            <span class="px-3 py-1 bg-gray-700 rounded-full text-sm">WebGL</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about" class="py-20">
+        <div class="container mx-auto px-6 lg:px-12">
+            <div class="flex flex-col lg:flex-row gap-12 items-center">
+                <div class="lg:w-1/2 relative flex justify-center">
+                    <div class="relative perspective-1000 transform-3d">
+                        <div class="w-64 h-64 md:w-96 md:h-96 bg-gradient-to-br from-purple-500/20 to-teal-500/20 rounded-full absolute -top-10 -left-10 blur-2xl animate-pulse"></div>
+                        <div class="w-64 h-64 md:w-96 md:h-96 bg-gray-800/50 backdrop-blur-md border border-gray-700 rounded-2xl shadow-2xl overflow-hidden">
+                            <!-- Updated profile image link -->
+                            <img src="https://i.ibb.co/DjS0RyJ/Whats-App-Image-2025-10-28-at-13-58-03.jpg" 
+                                 alt="About Me" 
+                                 class="w-full h-full object-cover"
+                                 onerror="this.src='https://placehold.co/640x640/6272a4/FFFFFF?text=Image+Error'">
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:w-1/2">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6">About Me</h2>
+                    <p class="text-gray-300 mb-6">
+                        I'm Prativa Dutta, a full stack developer passionate about creating efficient and user-friendly digital experiences. Wit I specialize in building complete applications from the ground up.
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-teal-500 flex items-center justify-center flex-shrink-0">
+                                <i data-feather="code" class="text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold">Frontend</h3>
+                                <p class="text-sm text-gray-400">React, Vue, Tailwind</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-teal-500 flex items-center justify-center flex-shrink-0">
+                                <i data-feather="database" class="text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold">Backend</h3>
+                                <p class="text-sm text-gray-400">Node.js, Python, SQL</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-teal-500 flex items-center justify-center flex-shrink-0">
+                                <i data-feather="cloud" class="text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold">DevOps</h3>
+                                <p class="text-sm text-gray-400">Docker, AWS, CI/CD</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-teal-500 flex items-center justify-center flex-shrink-0">
+                                <i data-feather="code" class="text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold">Development</h3>
+                                <p class="text-sm text-gray-400">Three.js, React</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-teal-500 flex items-center justify-center flex-shrink-0">
+                                <i data-feather="eye" class="text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold">VR/AR</h3>
+                                <p class="text-sm text-gray-400">WebXR, Unity</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-teal-500 flex items-center justify-center flex-shrink-0">
+                                <i data-feather="layers" class="text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold">UI/UX</h3>
+                                <p class="text-sm text-gray-400">Figma, Adobe XD</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex gap-4">
+                        <!-- Updated: Replaced "Upload CV" with "My CV" button that links to your CV -->
+                        <a href="C:\Users\prati\Desktop\MY portfolio/yourcv.pdf" target="_blank" class="px-6 py-3 bg-gradient-to-r from-purple-500 to-teal-500 rounded-full font-medium hover:shadow-lg hover:shadow-purple-500/30 transition-all transform hover:-translate-y-1">
+                            My CV
+                        </a>
+                    </div>
+                    <!-- Added social links -->
+                    <div class="flex gap-6 mt-8">
+                        <a href="https://github.com/exploreprativa" aria-label="GitHub Profile" class="text-gray-400 hover:text-purple-400 transition-colors" target="_blank">
+                            <i data-feather="github" class="w-6 h-6"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/prativa-dutta-576690385" aria-label="LinkedIn Profile" class="text-gray-400 hover:text-purple-400 transition-colors" target="_blank">
+                            <i data-feather="linkedin" class="w-6 h-6"></i>
+                        </a>
+                        <a href="https://www.instagram.com/ms.dutta7?igsh=eW12NHZob3poNjhj" aria-label="Instagram Profile" class="text-gray-400 hover:text-purple-400 transition-colors" target="_blank">
+                            <i data-feather="instagram" class="w-6 h-6"></i>
+                        </a>
+                        <a href="https://t.me/prativadutta" aria-label="Telegram Profile" class="text-gray-400 hover:text-purple-400 transition-colors" target="_blank">
+                            <i data-feather="send" class="w-6 h-6"></i> <!-- Using 'send' icon for Telegram -->
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section id="contact" class="py-20 bg-gray-900/70 backdrop-blur-sm">
+        <div class="container mx-auto px-6 lg:px-12">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">Let's Create Something Amazing</h2>
+                <p class="text-gray-400 mb-12 max-w-2xl mx-auto">
+                    Have a project in mind? Want to collaborate? I'd love to hear from you!
+                </p>
+                
+                <!-- Simple form alert -->
+                <div id="form-message" class="hidden p-4 mb-4 text-sm text-teal-300 bg-teal-800/50 rounded-lg" role="alert">
+                  <span class="font-medium">Success!</span> Your message has been sent (demo).
+                </div>
+                
+                <form id="contact-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="flex-1 perspective-1000">
+                        <input type="text" placeholder="Name" required class="w-full px-6 py-4 bg-gray-800 border border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all">
+                    </div>
+                    <div class="flex-1 perspective-1000">
+                        <input type="email" placeholder="Email" required class="w-full px-6 py-4 bg-gray-800 border border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all">
+                    </div>
+                    <div class="md:col-span-2 perspective-1000">
+                        <input type="text" placeholder="Subject" class="w-full px-6 py-4 bg-gray-800 border border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all">
+                    </div>
+                    <div class="md:col-span-2 perspective-1000">
+                        <textarea placeholder="Message" rows="5" required class="w-full px-6 py-4 bg-gray-800 border border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"></textarea>
+                    </div>
+                    <div class="md:col-span-2">
+                        <button type="submit" class="px-8 py-4 bg-gradient-to-r from-purple-500 to-teal-500 rounded-xl font-medium hover:shadow-lg hover:shadow-purple-500/30 transition-all transform hover:-translate-y-1">
+                            Send Message
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- CUSTOM FOOTER COMPONENT -->
+    <custom-footer></custom-footer>
+
+    <!-- JAVASCRIPT DEFINITIONS -->
+    <script>
+        // --- CUSTOM NAVBAR COMPONENT ---
+        class CustomNavbar extends HTMLElement {
+            connectedCallback() {
+                this.innerHTML = `
+                <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 bg-gray-900/80 backdrop-blur-md border-b border-gray-800 transition-all duration-300">
+                    <div class="container mx-auto px-6 lg:px-12">
+                        <div class="flex justify-between items-center h-20">
+                            <!-- Logo / Site Title -->
+                            <a href="#" class="text-2xl font-bold">
+                                <span class="text-gradient from-purple-400 to-teal-400">Prativa</span>
+                                <span class="text-white">Dutta</span>
+                            </a>
+                            
+                            <!-- Desktop Nav -->
+                            <div class="hidden md:flex items-center space-x-8">
+                                <a href="#work" class="text-gray-300 hover:text-teal-400 transition-colors">Work</a>
+                                <a href="#about" class="text-gray-300 hover:text-teal-400 transition-colors">About</a>
+                                <a href="#contact" class="text-gray-300 hover:text-teal-400 transition-colors">Contact</a>
+                            </div>
+                            
+                            <!-- Mobile Menu Button -->
+                            <div class="md:hidden">
+                                <button id="mobile-menu-btn" class="text-gray-300 hover:text-white">
+                                    <i data-feather="menu" class="w-6 h-6"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Mobile Menu (Hidden by default) -->
+                    <div id="mobile-menu" class="hidden md:hidden absolute top-20 left-0 right-0 bg-gray-900 border-t border-gray-800">
+                        <div class="flex flex-col items-center space-y-4 py-6">
+                            <a href="#work" class="text-gray-300 hover:text-teal-400 transition-colors block px-4 py-2">Work</a>
+                            <a href="#about" class="text-gray-300 hover:text-teal-400 transition-colors block px-4 py-2">About</a>
+                            <a href="#contact" class="text-gray-300 hover:text-teal-400 transition-colors block px-4 py-2">Contact</a>
+                        </div>
+                    </div>
+                </nav>
+                `;
+
+                // Add event listeners for mobile menu
+                const menuBtn = this.querySelector('#mobile-menu-btn');
+                const mobileMenu = this.querySelector('#mobile-menu');
+                menuBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+                
+                // Close menu when a link is clicked
+                mobileMenu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                    });
+                });
+            }
+        }
+        customElements.define('custom-navbar', CustomNavbar);
+
+        // --- CUSTOM FOOTER COMPONENT ---
+        class CustomFooter extends HTMLElement {
+            connectedCallback() {
+                this.innerHTML = `
+                <footer class="py-12 bg-gray-900 border-t border-gray-800">
+                    <div class="container mx-auto px-6 lg:px-12 text-center">
+                        <div class="flex justify-center space-x-6 mb-6">
+                            <a href="https://github.com/exploreprativa" aria-label="GitHub Profile" class="text-gray-500 hover:text-purple-400 transition-colors" target="_blank">
+                                <i data-feather="github" class="w-6 h-6"></i>
+                            </a>
+                            <a href="https://www.linkedin.com/in/prativa-dutta-576690385" aria-label="LinkedIn Profile" class="text-gray-500 hover:text-purple-400 transition-colors" target="_blank">
+                                <i data-feather="linkedin" class="w-6 h-6"></i>
+                            </a>
+                            <a href="https://www.instagram.com/ms.dutta7?igsh=eW12NHZob3poNjhj" aria-label="Instagram Profile" class="text-gray-500 hover:text-purple-400 transition-colors" target="_blank">
+                                <i data-feather="instagram" class="w-6 h-6"></i>
+                            </a>
+                            <a href="https://t.me/prativadutta" aria-label="Telegram Profile" class="text-gray-500 hover:text-purple-400 transition-colors" target="_blank">
+                                <i data-feather="send" class="w-6 h-6"></i> <!-- Using 'send' icon for Telegram -->
+                            </a>
+                        </div>
+                        <p class="text-gray-500">&copy; ${new Date().getFullYear()} Prativa Dutta. All rights reserved.</p>
+                    </div>
+                </footer>
+                `;
+            }
+        }
+        customElements.define('custom-footer', CustomFooter);
+        
+        // --- MAIN SCRIPT (replaces script.js) ---
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. Initialize Feather Icons
+            // We call it here to ensure custom elements are defined
+            feather.replace();
+
+            // 2. Initialize Vanta.js Globe Background
+            if (window.VANTA) {
+                VANTA.GLOBE({
+                    el: "#vanta-bg",
+                    mouseControls: true,
+                    touchControls: true,
+                    gyroControls: false,
+                    minHeight: 200.00,
+                    minWidth: 200.00,
+                    scale: 1.00,
+                    scaleMobile: 1.00,
+                    color: 0x3f8fff, // A teal-ish color
+                    color2: 0xa855f7, // A purple-ish color
+                    backgroundColor: 0x111827, // gray-900
+                    size: 0.80
+                });
+            }
+
+            // 3. 3D Card Tilt Effect
+            const cardContainer = document.getElementById('floating-card-container');
+            const card = document.getElementById('floating-card');
+            
+            if (cardContainer && card) {
+                cardContainer.addEventListener('mousemove', (e) => {
+                    const rect = cardContainer.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const { width, height } = rect;
+                    const rotateX = (y / height - 0.5) * -20; // Max 10deg rotation
+                    const rotateY = (x / width - 0.5) * 20;  // Max 10deg rotation
+                    
+                    gsap.to(card, {
+                        rotationX: rotateX,
+                        rotationY: rotateY,
+                        scale: 1.05,
+                        duration: 0.5,
+                        ease: 'power3.out'
+                    });
+                });
+
+                cardContainer.addEventListener('mouseleave', () => {
+                    gsap.to(card, {
+                        rotationX: 0,
+                        rotationY: 0,
+                        scale: 1,
+                        duration: 0.5,
+                        ease: 'power3.out'
+                    });
+                });
+            }
+            
+            // 4. Navbar scroll shadow
+            const navbar = document.getElementById('navbar');
+            if (navbar) {
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 10) {
+                        navbar.classList.add('shadow-lg', 'shadow-gray-900/50');
+                    } else {
+                        navbar.classList.remove('shadow-lg', 'shadow-gray-900/50');
+                    }
+                });
+            }
+            
+            // 5. Contact Form Submission (Demo)
+            const contactForm = document.getElementById('contact-form');
+            const formMessage = document.getElementById('form-message');
+            
+            if (contactForm && formMessage) {
+                contactForm.addEventListener('submit', (e) => {
+                    e.preventDefault(); // Prevent actual submission
+                    
+                    // Show success message
+                    formMessage.classList.remove('hidden');
+                    
+                    // Reset form
+                    contactForm.reset();
+                    
+                    // Hide message after 3 seconds
+                    setTimeout(() => {
+                        formMessage.classList.add('hidden');
+                    }, 3000);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

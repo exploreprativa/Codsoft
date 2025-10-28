@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeoCalc - Modern Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .calculator {
+            width: 360px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .calculator:hover {
+            transform: translateY(-5px);
+        }
+        
+        .display-container {
+            padding: 30px 25px 20px;
+            background: rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+        
+        .display {
+            color: white;
+            text-align: right;
+            overflow: hidden;
+        }
+        
+        .previous-operand {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            min-height: 24px;
+            margin-bottom: 8px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .current-operand {
+            font-size: 3rem;
+            font-weight: 300;
+            word-wrap: break-word;
+            word-break: break-all;
+            line-height: 1.2;
+        }
+        
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        button {
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1.5rem;
+            height: 70px;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(255, 255, 255, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        button:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        button:hover::before {
+            opacity: 1;
+        }
+        
+        button:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .operator {
+            background: rgba(255, 107, 107, 0.3);
+            font-weight: 500;
+        }
+        
+        .operator:hover {
+            background: rgba(255, 107, 107, 0.4);
+        }
+        
+        .equals {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            color: #333;
+            font-weight: 600;
+            grid-column: span 2;
+        }
+        
+        .equals:hover {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            filter: brightness(1.1);
+        }
+        
+        .clear {
+            background: rgba(108, 92, 231, 0.3);
+        }
+        
+        .clear:hover {
+            background: rgba(108, 92, 231, 0.4);
+        }
+        
+        .zero {
+            grid-column: span 2;
+        }
+        
+        .calculator-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px 0;
+            color: white;
+        }
+        
+        .calculator-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .calculator-title i {
+            color: #ff9a9e;
+        }
+        
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background 0.2s;
+        }
+        
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: scale(0);
+            animation: ripple-animation 0.6s linear;
+            pointer-events: none;
+        }
+        
+        @keyframes ripple-animation {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        
+        .history-panel {
+            position: absolute;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            color: white;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .history-panel.open {
+            right: 0;
+        }
+        
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .history-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+        
+        .close-history {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        
+        .history-list {
+            list-style: none;
+        }
+        
+        .history-item {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 1rem;
+        }
+        
+        .history-expression {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+        
+        .history-result {
+            font-weight: 500;
+            margin-top: 5px;
+        }
+        
+        .memory-functions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .memory-btn {
+            flex: 1;
+            height: 40px;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        @media (max-width: 400px) {
+            .calculator {
+                width: 100%;
+                max-width: 360px;
+            }
+            
+            .current-operand {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="calculator-header">
+            <div class="calculator-title">
+                <i class="fas fa-calculator"></i>
+                <span>NeoCalc</span>
+            </div>
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+        
+        <div class="display-container">
+            <div class="display">
+                <div class="previous-operand"></div>
+                <div class="current-operand">0</div>
+            </div>
+        </div>
+        
+        <div class="memory-functions">
+            <button class="memory-btn" data-action="mc">MC</button>
+            <button class="memory-btn" data-action="mr">MR</button>
+            <button class="memory-btn" data-action="m-plus">M+</button>
+            <button class="memory-btn" data-action="m-minus">M-</button>
+        </div>
+        
+        <div class="buttons">
+            <button class="clear" data-action="clear">C</button>
+            <button class="operator" data-action="toggle-sign">±</button>
+            <button class="operator" data-action="percent">%</button>
+            <button class="operator" data-action="divide">÷</button>
+            
+            <button class="number" data-number="7">7</button>
+            <button class="number" data-number="8">8</button>
+            <button class="number" data-number="9">9</button>
+            <button class="operator" data-action="multiply">×</button>
+            
+            <button class="number" data-number="4">4</button>
+            <button class="number" data-number="5">5</button>
+            <button class="number" data-number="6">6</button>
+            <button class="operator" data-action="subtract">−</button>
+            
+            <button class="number" data-number="1">1</button>
+            <button class="number" data-number="2">2</button>
+            <button class="number" data-number="3">3</button>
+            <button class="operator" data-action="add">+</button>
+            
+            <button class="number zero" data-number="0">0</button>
+            <button class="number" data-action="decimal">.</button>
+            <button class="equals" data-action="calculate">=</button>
+        </div>
+        
+        <div class="history-panel" id="historyPanel">
+            <div class="history-header">
+                <div class="history-title">Calculation History</div>
+                <button class="close-history" id="closeHistory">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <ul class="history-list" id="historyList">
+                <!-- History items will be added here -->
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const display = document.querySelector('.current-operand');
+            const previousDisplay = document.querySelector('.previous-operand');
+            const buttons = document.querySelectorAll('button');
+            const historyPanel = document.getElementById('historyPanel');
+            const historyList = document.getElementById('historyList');
+            const themeToggle = document.getElementById('themeToggle');
+            const closeHistory = document.getElementById('closeHistory');
+            
+            let currentOperand = '0';
+            let previousOperand = '';
+            let operation = undefined;
+            let resetScreen = false;
+            let memory = 0;
+            let history = [];
+            let isDarkTheme = true;
+            
+            // Update display
+            function updateDisplay() {
+                display.textContent = formatDisplayNumber(currentOperand);
+                if (operation != null) {
+                    previousDisplay.textContent = `${formatDisplayNumber(previousOperand)} ${getOperationSymbol(operation)}`;
+                } else {
+                    previousDisplay.textContent = '';
+                }
+            }
+            
+            // Format number for display (add commas)
+            function formatDisplayNumber(num) {
+                if (num === '') return '';
+                
+                // Handle negative numbers
+                const isNegative = num.startsWith('-');
+                const absoluteNum = isNegative ? num.slice(1) : num;
+                
+                // Split into integer and decimal parts
+                const [integerPart, decimalPart] = absoluteNum.split('.');
+                
+                // Format integer part with commas
+                let formattedInteger = '';
+                for (let i = integerPart.length - 1, j = 0; i >= 0; i--, j++) {
+                    if (j > 0 && j % 3 === 0) {
+                        formattedInteger = ',' + formattedInteger;
+                    }
+                    formattedInteger = integerPart[i] + formattedInteger;
+                }
+                
+                // Combine parts
+                let result = isNegative ? '-' : '';
+                result += formattedInteger;
+                if (decimalPart !== undefined) {
+                    result += '.' + decimalPart;
+                }
+                
+                return result;
+            }
+            
+            // Get operation symbol for display
+            function getOperationSymbol(op) {
+                switch(op) {
+                    case 'add': return '+';
+                    case 'subtract': return '−';
+                    case 'multiply': return '×';
+                    case 'divide': return '÷';
+                    case 'percent': return '%';
+                    default: return '';
+                }
+            }
+            
+            // Add number to current operand
+            function appendNumber(number) {
+                if (currentOperand === '0' || resetScreen) {
+                    currentOperand = number;
+                    resetScreen = false;
+                } else {
+                    currentOperand += number;
+                }
+            }
+            
+            // Add decimal point
+            function addDecimal() {
+                if (resetScreen) {
+                    currentOperand = '0.';
+                    resetScreen = false;
+                    return;
+                }
+                
+                if (currentOperand.includes('.')) return;
+                currentOperand += '.';
+            }
+            
+            // Choose operation
+            function chooseOperation(op) {
+                if (currentOperand === '') return;
+                
+                if (previousOperand !== '') {
+                    calculate();
+                }
+                
+                operation = op;
+                previousOperand = currentOperand;
+                resetScreen = true;
+            }
+            
+            // Calculate result
+            function calculate() {
+                let computation;
+                const prev = parseFloat(previousOperand);
+                const current = parseFloat(currentOperand);
+                
+                if (isNaN(prev) || isNaN(current)) return;
+                
+                switch (operation) {
+                    case 'add':
+                        computation = prev + current;
+                        break;
+                    case 'subtract':
+                        computation = prev - current;
+                        break;
+                    case 'multiply':
+                        computation = prev * current;
+                        break;
+                    case 'divide':
+                        if (current === 0) {
+                            showError("Cannot divide by zero!");
+                            return;
+                        }
+                        computation = prev / current;
+                        break;
+                    case 'percent':
+                        computation = prev % current;
+                        break;
+                    default:
+                        return;
+                }
+                
+                // Add to history
+                addToHistory(previousOperand, currentOperand, operation, computation.toString());
+                
+                currentOperand = roundResult(computation).toString();
+                operation = undefined;
+                previousOperand = '';
+                resetScreen = true;
+            }
+            
+            // Round result to avoid floating point precision issues
+            function roundResult(num) {
+                return Math.round(num * 100000000) / 100000000;
+            }
+            
+            // Clear calculator
+            function clear() {
+                currentOperand = '0';
+                previousOperand = '';
+                operation = undefined;
+            }
+            
+            // Toggle positive/negative
+            function toggleSign() {
+                currentOperand = (parseFloat(currentOperand) * -1).toString();
+            }
+            
+            // Calculate percentage
+            function calculatePercentage() {
+                currentOperand = (parseFloat(currentOperand) / 100).toString();
+            }
+            
+            // Show error message
+            function showError(message) {
+                display.textContent = "Error";
+                previousDisplay.textContent = message;
+                setTimeout(() => {
+                    clear();
+                    updateDisplay();
+                }, 2000);
+            }
+            
+            // Add calculation to history
+            function addToHistory(prev, current, op, result) {
+                const historyItem = {
+                    expression: `${formatDisplayNumber(prev)} ${getOperationSymbol(op)} ${formatDisplayNumber(current)}`,
+                    result: formatDisplayNumber(result)
+                };
+                
+                history.unshift(historyItem);
+                updateHistoryDisplay();
+                
+                // Auto-open history panel after calculation
+                historyPanel.classList.add('open');
+            }
+            
+            // Update history display
+            function updateHistoryDisplay() {
+                historyList.innerHTML = '';
+                
+                history.forEach(item => {
+                    const li = document.createElement('li');
+                    li.className = 'history-item';
+                    li.innerHTML = `
+                        <div class="history-expression">${item.expression}</div>
+                        <div class="history-result">= ${item.result}</div>
+                    `;
+                    historyList.appendChild(li);
+                });
+            }
+            
+            // Create ripple effect on button click
+            function createRipple(event) {
+                const button = event.currentTarget;
+                const circle = document.createElement('span');
+                const diameter = Math.max(button.clientWidth, button.clientHeight);
+                const radius = diameter / 2;
+                
+                circle.style.width = circle.style.height = `${diameter}px`;
+                circle.style.left = `${event.clientX - button.getBoundingClientRect().left - radius}px`;
+                circle.style.top = `${event.clientY - button.getBoundingClientRect().top - radius}px`;
+                circle.classList.add('ripple');
+                
+                const ripple = button.getElementsByClassName('ripple')[0];
+                if (ripple) {
+                    ripple.remove();
+                }
+                
+                button.appendChild(circle);
+            }
+            
+            // Toggle theme
+            function toggleTheme() {
+                isDarkTheme = !isDarkTheme;
+                
+                if (isDarkTheme) {
+                    document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                } else {
+                    document.body.style.background = 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)';
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                }
+            }
+            
+            // Handle memory functions
+            function handleMemory(action) {
+                switch(action) {
+                    case 'mc': // Memory Clear
+                        memory = 0;
+                        break;
+                    case 'mr': // Memory Recall
+                        currentOperand = memory.toString();
+                        resetScreen = true;
+                        break;
+                    case 'm-plus': // Memory Add
+                        memory += parseFloat(currentOperand) || 0;
+                        break;
+                    case 'm-minus': // Memory Subtract
+                        memory -= parseFloat(currentOperand) || 0;
+                        break;
+                }
+                updateDisplay();
+            }
+            
+            // Handle button clicks
+            buttons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    createRipple(e);
+                    
+                    if (button.dataset.number) {
+                        appendNumber(button.dataset.number);
+                        updateDisplay();
+                    } else if (button.dataset.action === 'decimal') {
+                        addDecimal();
+                        updateDisplay();
+                    } else if (button.dataset.action === 'clear') {
+                        clear();
+                        updateDisplay();
+                    } else if (button.dataset.action === 'toggle-sign') {
+                        toggleSign();
+                        updateDisplay();
+                    } else if (button.dataset.action === 'percent') {
+                        calculatePercentage();
+                        updateDisplay();
+                    } else if (['add', 'subtract', 'multiply', 'divide'].includes(button.dataset.action)) {
+                        chooseOperation(button.dataset.action);
+                        updateDisplay();
+                    } else if (button.dataset.action === 'calculate') {
+                        calculate();
+                        updateDisplay();
+                    } else if (['mc', 'mr', 'm-plus', 'm-minus'].includes(button.dataset.action)) {
+                        handleMemory(button.dataset.action);
+                    }
+                });
+            });
+            
+            // Event listeners for theme and history
+            themeToggle.addEventListener('click', toggleTheme);
+            closeHistory.addEventListener('click', () => {
+                historyPanel.classList.remove('open');
+            });
+            
+            // Keyboard support
+            document.addEventListener('keydown', (event) => {
+                if (event.key >= '0' && event.key <= '9') {
+                    appendNumber(event.key);
+                    updateDisplay();
+                } else if (event.key === '.') {
+                    addDecimal();
+                    updateDisplay();
+                } else if (event.key === '+' || event.key === '-') {
+                    chooseOperation(event.key === '+' ? 'add' : 'subtract');
+                    updateDisplay();
+                } else if (event.key === '*' || event.key === 'x') {
+                    chooseOperation('multiply');
+                    updateDisplay();
+                } else if (event.key === '/') {
+                    chooseOperation('divide');
+                    updateDisplay();
+                } else if (event.key === 'Enter' || event.key === '=') {
+                    calculate();
+                    updateDisplay();
+                } else if (event.key === 'Escape' || event.key === 'c' || event.key === 'C') {
+                    clear();
+                    updateDisplay();
+                } else if (event.key === '%') {
+                    calculatePercentage();
+                    updateDisplay();
+                }
+            });
+            
+            // Initialize display
+            updateDisplay();
+        });
+    </script>
+</body>
+</html>
